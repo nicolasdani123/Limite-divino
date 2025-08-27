@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Limite Divino</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <main>
+      <section class="data-inform">
+        <h1>Limite Divino</h1>
+        <h2 class="book-title"><strong>Gênesis 6:3</strong></h2>
+        <p>
+          Então disse o Senhor: não contenderá o meu espírito para sempre com
+          o homem; porque ele também é carne; porém os seus dias serão cento e
+          vinte anos.
+        </p>
+      </section>
+
+      <section class="container-data-user">
+        <div class="group-container">
+          <label for="date" aria-label="Insira sua data de nascimento">
+            Data de Nascimento <span>:</span>
+          </label>
+          <div class="container-input-date">
+            <input 
+              type="date" 
+              class="date-input inputText" 
+              placeholder="dd/mm/aaaa" 
+              aria-label="Campo para inserir sua data de nascimento" 
+            />
+            <button class="button-Changes" aria-label="Alterar a data inserida">Alterar</button>
+          </div>
+        </div>
+
+        <div class="container-buttons">
+          <button class="button-regress-age" aria-label="Calcular idade regressiva">Calcular</button>
+          <button class="button-reset" aria-label="Resetar valores">Resetar</button>
+        </div>
+      </section>
+
+      <section class="result-of-regress-age">
+        <p class="result"></p>
+      </section>
+
+      <section class="calendar-section">
+        <div class="yearTimeline"></div>
+        <div class="monthTimeline"></div>
+        <div id="monthYear"></div>
+        <div class="container-calendar">
+          <div id="calendar"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,270 @@
+body {
+  background-color: #fff8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  min-height: 100vh;
+}
+
+.data-inform {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.data-inform h1 {
+  font-size: 2rem;
+  color: #8b6d4b;
+  text-align: center;
+  margin: 0.8rem 0;
+}
+
+.data-inform h2 {
+  margin: 0.5rem 0;
+  font-family: "Tangerine", cursive;
+  font-size: 1.4rem;
+  color: #222;
+  font-weight: 80;
+}
+
+.data-inform p {
+  text-align: justify;
+  width: 100%;
+  font-size: 16px;
+  line-height: 1.6;
+  font-family: "Cinzel", serif;
+  color: #222;
+  font-weight: 200;
+  margin-bottom: 1rem;
+}
+
+.date-input,
+.inputText {
+  padding: 10px;
+  font-size: 14px;
+  margin: 0.5rem 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  box-sizing: border-box;
+  min-height: 44px;
+  width: 100%;
+}
+
+.button-Changes,
+.button-regress-age,
+.button-reset {
+  background-color: #a67c52;
+  color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0.5rem 0;
+  outline: none;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.button-Changes:hover,
+.button-regress-age:hover,
+.button-reset:hover {
+  background-color: #8b6d4b;
+}
+
+.container-input-date {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.container-input-date .date-input,
+.container-input-date .inputText {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+}
+
+.container-input-date .button-Changes {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.container-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.group-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+
+.group-container label {
+  font-size: 14px;
+}
+
+.group-container label span {
+  font-size: 16px;
+}
+
+.result-of-regress-age {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 1rem;
+}
+
+.result-of-regress-age p {
+  font-size: 1rem;
+  color: #222;
+  text-align: center;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  justify-content: center;
+  padding: 2rem;
+  border: 1px solid #d6c4a2;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.day {
+  min-height: 2.5rem;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.day:hover {
+  background-color: #f0f0f0;
+  transition: 0.3s;
+}
+
+.lived {
+  background: #a67c52;
+  color: white;
+  font-weight: bold;
+}
+
+.lived:hover {
+  background-color: #8b6d4b;
+}
+
+.calendar-day-empty {
+  background-color: rgb(211, 206, 199);
+}
+
+.calendar-day-header {
+  margin: 0 0 1rem 0.5rem;
+}
+
+#monthYear {
+  display: flex;
+  justify-content: center;
+  margin: 2rem;
+  font-size: 1.4rem;
+}
+
+.monthTimeline,
+.yearTimeline {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2rem;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.monthTimeline div,
+.yearTimeline div {
+  background-color: #8b6d4b;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  color: white;
+  flex: 1 1 calc(25% - 0.3rem);
+  text-align: center;
+}
+
+.monthTimeline .current,
+.yearTimeline .current {
+  background-color: #ccc;
+  color: white;
+}
+
+@media (min-width: 600px) {
+  .data-inform h1 {
+    font-size: 2.5rem;
+  }
+  .container-buttons {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  #calendar {
+    padding: 1rem 2rem;
+    max-width: 80%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .data-inform h1 {
+    font-size: 3.5rem;
+    margin-top: 4rem;
+  }
+  .data-inform h2 {
+    font-size: 2.2rem;
+    margin: 1.3rem 0;
+  }
+  .date-input,
+  .inputText {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+  .data-inform p {
+    font-size: 1.4rem;
+  }
+  .result-of-regress-age p {
+    font-size: 1.3rem;
+    margin-top: 2.5rem;
+  }
+  .group-container label {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+  }
+  #calendar {
+    width: 70%;
+    margin: 1rem;
+  }
+  .monthTimeline div,
+  .yearTimeline div {
+    flex: none;
+    min-width: 15%;
+  }
+  .container-calendar {
+    display: flex;
+    justify-content: center;
+  }
+  .button-regress-age,
+  .button-reset {
+    width: 10rem;
+    margin: 0 2rem;
+  }
+  .button-Changes {
+    width: 8rem;
+    height: 3rem;
+  }
+}
