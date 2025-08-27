@@ -5,7 +5,7 @@ var data = {
   key: "birthDate",
   resetButton: document.querySelector(".button-reset"),
   toggleButton: document.querySelector(".button-Changes"),
-  container: document.querySelector(".container-input-date")
+  container: document.querySelector(".container-input-date"),
 };
 
 var countdownDisplay = document.createElement("p");
@@ -77,12 +77,15 @@ function startCountdown(birthValue) {
 
     var diasPassados = Math.floor((now - birthDate) / (1000 * 60 * 60 * 24));
     var years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-    var months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44));
-    var days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+    var months = Math.floor(
+      (diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44)
+    );
+    var days = Math.floor(
+      (diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24)
+    );
     var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-    countdownDisplay.textContent =
-      `${years} anos, ${months} meses, ${days} dias e ${minutes} minutos restantes | Já viveu ${diasPassados} dias.`;
+    countdownDisplay.textContent = `${years} anos, ${months} meses, ${days} dias e ${minutes} minutos restantes | Já viveu ${diasPassados} dias.`;
     countdownDisplay.style.color = "black";
   }
 
@@ -102,7 +105,7 @@ function generateYearTimeline(birthDate) {
     const box = document.createElement("div");
     box.classList.add("year-box");
 
-    const isCurrentYear = (year === currentYear);
+    const isCurrentYear = year === currentYear;
     box.innerText = year;
 
     if (isCurrentYear) {
@@ -120,7 +123,20 @@ function generateMonthTimeline() {
   container.innerHTML = "";
 
   const today = new Date();
-  const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+  const monthNames = [
+    "Jan",
+    "Fev",
+    "Mar",
+    "Abr",
+    "Mai",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Set",
+    "Out",
+    "Nov",
+    "Dez",
+  ];
 
   let current = new Date(today.getFullYear(), today.getMonth() - 11, 1);
 
@@ -199,9 +215,13 @@ window.addEventListener("DOMContentLoaded", () => {
   } else {
     birthDateObj = new Date(2007, 4, 27);
   }
-generateYearTimeline(birthDateObj);
+  generateYearTimeline(birthDateObj);
   generateMonthTimeline(birthDateObj);
-  generateCalendar(new Date().getMonth(), new Date().getFullYear(), birthDateObj);
+  generateCalendar(
+    new Date().getMonth(),
+    new Date().getFullYear(),
+    birthDateObj
+  );
   startCountdown(savedDate || "27-05-2007");
 });
 
