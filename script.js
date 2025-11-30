@@ -1,128 +1,120 @@
-var data = {
+const data = {
   input: document.querySelector(".date-input"),
   result: document.querySelector(".result-of-regress-age"),
-  startButton: document.querySelector(".button-regress-age"),
   key: "birthDate",
   resetButton: document.querySelector(".button-reset"),
-  toggleButton: document.querySelector(".button-Changes"),
   container: document.querySelector(".container-input-date"),
 };
 
-var countdownDisplay = document.createElement("p");
-data.result.appendChild(countdownDisplay);
-
-var timer;
-
 function parseDateBR(value) {
-  if (/^\d{2}-\d{2}-\d{4}$/.test(value)) {
-    const [day, month, year] = value.split("-");
-    return new Date(`${year}-${month}-${day}`);
+  const birthDateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+  if (!birthDateRegex.test(value)) return null;
+
+  const [day, month, year] = value.split("/").map(Number);
+  const date = new Date(year, month - 1, day);
+
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() + 1 !== month ||
+    date.getDate() !== day
+  ) {
+    return null;
   }
-  return new Date(value);
+  return date;
 }
 
-function toggleInputType() {
-  const input = data.input;
-  const currentType = input.getAttribute("type");
+function getAgeDetails(birthDate, today) {
+  let years = today.getFullYear() - birthDate.getFullYear();
+  let months = today.getMonth() - birthDate.getMonth();
+  let days = today.getDate() - birthDate.getDate();
 
-  input.setAttribute("type", currentType === "date" ? "text" : "date");
-  input.value = "";
+  if (days < 0) {
+    months -= 1;
+    const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+  return { years, months, days };
 }
 
-data.input.addEventListener("input", function () {
-  if (this.getAttribute("type") === "text") {
-    this.value = this.value.replace(/\D/g, "");
+const ElapsedTime = () => {
+  const inputValue = data.input.value.trim();
+  const birthDate = parseDateBR(inputValue);
 
-    if (this.value.length > 8) {
-      this.value = this.value.slice(0, 8);
-    }
-    if (this.value.length > 2) {
-      this.value = this.value.slice(0, 2) + "-" + this.value.slice(2);
-    }
-    if (this.value.length > 5) {
-      this.value = this.value.slice(0, 5) + "-" + this.value.slice(5);
-    }
-  }
-});
-
-data.toggleButton.addEventListener("click", toggleInputType);
-
-function startCountdown(birthValue) {
-  var birthDate = parseDateBR(birthValue);
-  if (isNaN(birthDate)) {
-    alert("Data inválida.");
+  if (!birthDate) {
+    data.result.textContent = "";
     return;
   }
 
-  generateMonthTimeline(birthDate);
-  console.log(birthDate);
+  const today = new Date();
+  if (birthDate > today) {
+    data.result.textContent = "A data de nascimento não pode ser no futuro.";
+    data.result.style.color = "red";
+    return;
+  }
 
-  var maxAge = 120;
-  var deathDate = new Date(
-    birthDate.getFullYear() + maxAge,
-    birthDate.getMonth(),
-    birthDate.getDate()
+  const daysLived = Math.floor((today - birthDate) / (1000 * 60 * 60 * 24));
+  const age = getAgeDetails(birthDate, today);
+
+  const lifeExpectancyYears = 76.8;
+  const expectedEndDate = new Date(birthDate);
+  expectedEndDate.setFullYear(
+    expectedEndDate.getFullYear() + lifeExpectancyYears
   );
 
-  function update() {
-    var now = new Date();
-    var diff = deathDate - now;
+  const limit120 = new Date(birthDate);
+  limit120.setFullYear(limit120.getFullYear() + 120);
 
-    if (diff <= 0) {
-      countdownDisplay.textContent = "Você atingiu 120 anos!";
-      countdownDisplay.style.color = "red";
-      clearInterval(timer);
-      return;
+  function calculateRemainingTime(endDate) {
+    let years = endDate.getFullYear() - today.getFullYear();
+    let months = endDate.getMonth() - today.getMonth();
+    let days = endDate.getDate() - today.getDate();
+
+    if (days < 0) {
+      months -= 1;
+      const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      days += prevMonth.getDate();
     }
-
-    var diasPassados = Math.floor((now - birthDate) / (1000 * 60 * 60 * 24));
-    var years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-    var months = Math.floor(
-      (diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44)
-    );
-    var days = Math.floor(
-      (diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24)
-    );
-    var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-    countdownDisplay.textContent = `${years} anos, ${months} meses, ${days} dias e ${minutes} minutos restantes | Já viveu ${diasPassados} dias.`;
-    countdownDisplay.style.color = "black";
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+    return { years, months, days };
   }
 
-  clearInterval(timer);
-  update();
-  timer = setInterval(update, 1000);
-}
-function generateYearTimeline(birthDate) {
-  const container = document.querySelector(".yearTimeline");
-  container.innerHTML = "";
+  const remainingToExpectancy = calculateRemainingTime(expectedEndDate);
+  const remainingTo120 = calculateRemainingTime(limit120);
 
-  const today = new Date();
-  const startYear = birthDate.getFullYear();
-  const currentYear = today.getFullYear();
+  data.result.textContent =
+    `🗓️ Dias vividos: ${daysLived}\n` +
+    `🧭 Tempo vivido: ${age.years}a ${age.months}m ${age.days}d\n` +
+    `📊 Expectativa de vida (BR): ${lifeExpectancyYears} anos\n` +
+    `⏳ Faltam: ${remainingToExpectancy.years}a ${remainingToExpectancy.months}m ${remainingToExpectancy.days}d\n` +
+    `🧬 Até 120 anos: ${remainingTo120.years}a ${remainingTo120.months}m ${remainingTo120.days}d`;
+  data.result.style.color = "black";
+};
 
-  for (let year = startYear; year <= currentYear; year++) {
+const timelineYears = (birthDate, today) => {
+  const containerTimelineYears = document.querySelector(".yearTimeline");
+  containerTimelineYears.innerHTML = "";
+
+  const birthYear = birthDate.getFullYear();
+  const todayYear = today.getFullYear();
+
+  for (let year = birthYear; year <= todayYear; year++) {
     const box = document.createElement("div");
     box.classList.add("year-box");
-
-    const isCurrentYear = year === currentYear;
-    box.innerText = year;
-
-    if (isCurrentYear) {
-      box.classList.add("current");
-    } else {
-      box.classList.add("past");
-    }
-
-    container.appendChild(box);
+    box.textContent = year;
+    box.classList.add(year === todayYear ? "current" : "past");
+    containerTimelineYears.appendChild(box);
   }
-}
+};
 
-function generateMonthTimeline() {
-  const container = document.querySelector(".monthTimeline");
-  container.innerHTML = "";
-
-  const today = new Date();
+function timelineMonth(birthDate) {
+  const containerTimelineMonth = document.querySelector(".monthTimeline");
   const monthNames = [
     "Jan",
     "Fev",
@@ -138,23 +130,98 @@ function generateMonthTimeline() {
     "Dez",
   ];
 
+  containerTimelineMonth.innerHTML = "";
+
+  const today = new Date();
   let current = new Date(today.getFullYear(), today.getMonth() - 11, 1);
 
-  while (current <= today) {
+  for (let i = 0; i < 12; i++) {
     const box = document.createElement("div");
     box.classList.add("month-box");
+    box.textContent = monthNames[current.getMonth()];
 
     const isCurrentMonth =
       current.getFullYear() === today.getFullYear() &&
       current.getMonth() === today.getMonth();
 
-    box.innerText = monthNames[current.getMonth()];
     box.classList.add(isCurrentMonth ? "current" : "past");
 
-    container.appendChild(box);
+    containerTimelineMonth.appendChild(box);
+
     current.setMonth(current.getMonth() + 1);
   }
 }
+
+const saveLocalStorage = (value) => {
+  localStorage.setItem(data.key, value || "07/07/1988");
+};
+
+const loadLocalStorage = () => {
+  const savedDate = localStorage.getItem(data.key);
+  data.input.value = savedDate || "07/07/1988";
+};
+
+window.addEventListener("load", () => {
+  loadLocalStorage();
+  const savedDate = data.input.value.trim();
+  const birthDate = parseDateBR(savedDate);
+  const today = new Date();
+
+  if (birthDate) {
+    ElapsedTime();
+    timelineYears(birthDate, today);
+    timelineMonth(birthDate, today);
+    generateCalendar(today.getMonth(), today.getFullYear(), birthDate);
+  } else {
+    data.result.textContent = "⚠️ Nenhuma data informada.";
+    data.result.style.color = "red";
+  }
+});
+
+const resetData = () => {
+  localStorage.removeItem(data.key);
+  data.input.value = "";
+  document.querySelector(".yearTimeline").innerHTML = "";
+  document.querySelector(".monthTimeline").innerHTML = "";
+  document.getElementById("calendar").innerHTML = "";
+  document.getElementById("monthYear").innerText = "";
+  data.result.textContent = "✅ Dados foram limpos com sucesso.";
+  data.result.style.color = "green";
+};
+
+let inputTimer;
+data.input.addEventListener("input", (e) => {
+  clearTimeout(inputTimer);
+  e.target.value = e.target.value
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "$1/$2")
+    .replace(/(\d{2})(\d)/, "$1/$2")
+    .slice(0, 10);
+
+  inputTimer = setTimeout(() => {
+    const inputValue = e.target.value.trim();
+    const birthDate = parseDateBR(inputValue);
+    const today = new Date();
+
+    if (!inputValue) {
+      data.result.textContent = "⚠️ Nenhuma data informada.";
+      data.result.style.color = "red";
+      return;
+    }
+
+    if (birthDate) {
+      ElapsedTime();
+      saveLocalStorage(inputValue);
+      timelineYears(birthDate, today);
+      timelineMonth(birthDate, today);
+      generateCalendar(today.getMonth(), today.getFullYear(), birthDate);
+      data.result.style.color = "black";
+    } else {
+      data.result.textContent = "❌ Formato de data inválido. Use DD/MM/AAAA.";
+      data.result.style.color = "red";
+    }
+  }, 300);
+});
 
 function generateCalendar(month, year, birthDate) {
   const calendar = document.getElementById("calendar");
@@ -197,41 +264,18 @@ function generateCalendar(month, year, birthDate) {
   }
 }
 
-data.resetButton.addEventListener("click", () => {
-  localStorage.removeItem(data.key);
-  data.input.value = "";
-  countdownDisplay.textContent = "";
-  countdownDisplay.style.color = "black";
-  clearInterval(timer);
-});
+function atualizarCalendario() {
+  const inputValue = data.input.value.trim();
+  const birthDate = parseDateBR(inputValue);
+  const today = new Date();
 
-window.addEventListener("DOMContentLoaded", () => {
-  let savedDate = localStorage.getItem(data.key);
-  let birthDateObj;
-
-  if (savedDate) {
-    birthDateObj = parseDateBR(savedDate);
-    data.input.value = savedDate;
-  } else {
-    birthDateObj = new Date(2007, 4, 27);
+  if (birthDate) {
+    generateCalendar(today.getMonth(), today.getFullYear(), birthDate);
   }
-  generateYearTimeline(birthDateObj);
-  generateMonthTimeline(birthDateObj);
-  generateCalendar(
-    new Date().getMonth(),
-    new Date().getFullYear(),
-    birthDateObj
-  );
-  startCountdown(savedDate || "27-05-2007");
-});
+}
 
-data.startButton.addEventListener("click", () => {
-  var birthValue = data.input.value.trim();
-  if (!birthValue) {
-    alert("Selecione sua data de nascimento.");
-    return;
-  }
+setInterval(atualizarCalendario, 1000);
 
-  startCountdown(birthValue);
-  localStorage.setItem(data.key, birthValue);
-});
+atualizarCalendario();
+
+data.resetButton.addEventListener("click", resetData);

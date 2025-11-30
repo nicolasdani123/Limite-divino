@@ -52,7 +52,7 @@ body {
   width: 100%;
 }
 
-.button-Changes,
+
 .button-regress-age,
 .button-reset {
   background-color: #a67c52;
@@ -68,7 +68,7 @@ body {
   box-sizing: border-box;
 }
 
-.button-Changes:hover,
+
 .button-regress-age:hover,
 .button-reset:hover {
   background-color: #8b6d4b;
@@ -89,7 +89,7 @@ body {
   width: auto;
 }
 
-.container-input-date .button-Changes {
+.container-input-date  {
   flex: 0 0 auto;
   white-space: nowrap;
 }
@@ -118,16 +118,15 @@ body {
 .result-of-regress-age {
   display: flex;
   justify-content: center;
-  margin: 0.5rem 1rem;
+  margin: 3rem 0.5rem;
+  font-size: 15px;
+  line-height: 1.5rem;
+  text-align: center;
+  flex-wrap: wrap;
 }
 
-.result-of-regress-age p {
-  font-size: 1rem;
-  color: #222;
-  text-align: center;
-  line-height: 1.5;
-  font-weight: 300;
-}
+
+
 
 #calendar {
   display: grid;
@@ -196,14 +195,24 @@ body {
   padding: 0.5rem;
   border-radius: 0.3rem;
   color: white;
-  flex: 1 1 calc(25% - 0.3rem);
+  flex: 1 1 cal(25% - 0.3rem);
   text-align: center;
+  cursor: pointer;
 }
+.past{
+  background-color: #8b6d4b;
+  
 
+}
 .monthTimeline .current,
 .yearTimeline .current {
-  background-color: #ccc;
   color: white;
+  background-color: #ccc;
+}
+.yearTimeline {
+  
+  cursor: pointer;
+
 }
 
 @media (min-width: 600px) {
