@@ -116,26 +116,19 @@ const timelineYears = (birthDate, today) => {
 function timelineMonth(birthDate) {
   const containerTimelineMonth = document.querySelector(".monthTimeline");
   const monthNames = [
-    "Jan",
-    "Fev",
-    "Mar",
-    "Abr",
-    "Mai",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Set",
-    "Out",
-    "Nov",
-    "Dez",
+    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+    "Jul", "Ago", "Set", "Out", "Nov", "Dez"
   ];
 
   containerTimelineMonth.innerHTML = "";
 
   const today = new Date();
-  let current = new Date(today.getFullYear(), today.getMonth() - 11, 1);
+  let current = new Date(today.getFullYear(), 0, 1); 
 
-  for (let i = 0; i < 12; i++) {
+  while (
+    current.getFullYear() === today.getFullYear() &&
+    current.getMonth() <= today.getMonth()
+  ) {
     const box = document.createElement("div");
     box.classList.add("month-box");
     box.textContent = monthNames[current.getMonth()];
@@ -152,13 +145,14 @@ function timelineMonth(birthDate) {
   }
 }
 
+
 const saveLocalStorage = (value) => {
-  localStorage.setItem(data.key, value || "07/07/1988");
+  localStorage.setItem(data.key, value );
 };
 
 const loadLocalStorage = () => {
   const savedDate = localStorage.getItem(data.key);
-  data.input.value = savedDate || "07/07/1988";
+  data.input.value = savedDate ;
 };
 
 window.addEventListener("load", () => {
@@ -179,6 +173,8 @@ window.addEventListener("load", () => {
 });
 
 const resetData = () => {
+  const calendar = document.getElementById("calendar");
+  calendar.style.display = "none"
   localStorage.removeItem(data.key);
   data.input.value = "";
   document.querySelector(".yearTimeline").innerHTML = "";
@@ -187,6 +183,7 @@ const resetData = () => {
   document.getElementById("monthYear").innerText = "";
   data.result.textContent = "✅ Dados foram limpos com sucesso.";
   data.result.style.color = "green";
+
 };
 
 let inputTimer;
@@ -224,6 +221,7 @@ data.input.addEventListener("input", (e) => {
 });
 
 function generateCalendar(month, year, birthDate) {
+
   const calendar = document.getElementById("calendar");
   if (!calendar || !birthDate) return;
   calendar.innerHTML = "";
@@ -268,13 +266,15 @@ function atualizarCalendario() {
   const inputValue = data.input.value.trim();
   const birthDate = parseDateBR(inputValue);
   const today = new Date();
-
-  if (birthDate) {
+    const calendar = document.getElementById("calendar");
+    
+    if (birthDate) {
+    calendar.style.display = "grid"
     generateCalendar(today.getMonth(), today.getFullYear(), birthDate);
   }
 }
 
-setInterval(atualizarCalendario, 1000);
+setInterval(atualizarCalendario, timelineMonth,timelineYears, 1000);
 
 atualizarCalendario();
 

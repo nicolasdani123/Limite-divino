@@ -126,7 +126,8 @@ body {
 }
 
 
-
+.container-calendar{
+}
 
 #calendar {
   display: grid;
@@ -137,6 +138,7 @@ body {
   border: 1px solid #d6c4a2;
   border-radius: 8px;
   background-color: #fafafa;
+ display: none;
 }
 
 .day {
